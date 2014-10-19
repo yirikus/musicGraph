@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html data-ng-app="musicGraph" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Music Graph</title>
+    <!--<link href="css/main.css" rel="stylesheet" type="text/css" />-->
+	<link type="text/css" href="js/lib/jit/Examples/css/base.css" rel="stylesheet" />
+	<link type="text/css" href="js/lib/jit/Examples/css/RGraph.css" rel="stylesheet" />
+
+    <!-- libraries -->
+	<script type="text/javascript" src="js/lib/jquery.js"></script>
+    <script type="text/javascript" src="js/lib/jit/jit.js"></script>
+	<script type="text/javascript" src="js/lib/angular.js"></script>
+    <script type="text/javascript" src="js/lib/lastfm.api.md5.js"></script>
+    <script type="text/javascript" src="js/lib/lastfm.api.js"></script>
+    <script type="text/javascript" src="js/lib/lastfm.api.cache.js"></script>
+	
+	<!-- src -->
+	<script type="text/javascript" src="js/app.js"></script>
+	
+	<!-- http://bl.ocks.org/mbostock/929623 -->
+	<!-- http://www.ms-ds.com/our-thinking/insights/6-great-interactive-data-visualization-tools-part-2#anchor_infovis -->
+
+</head>
+<body data-ng-controller="MusicGraphController as mgc">
+    <div class="content-main">
+		<h1>Artists</h1>
+        <div class="content-body" data-ng-repeat="artist in artists">
+            <h2>{{artist.name}}</h2>            		
+			<div class="content-body-inner" >	
+			<h3>Similiar:</h3>
+			<ul><li data-ng-repeat="sim in artist.similar.artist">{{sim.name}}</li></ul>
+			</div>
+        </div>
+    </div>
+	
+	<div id="infovis"></div>
+	
+	<div>
+		<input type="text" ng-model="newArtist"/><button ng-click="addNode(newArtist)">add</button>
+	</div>
+</body>
+</html>
