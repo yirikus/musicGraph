@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="js/lib/jquery.js"></script>
     <script type="text/javascript" src="js/lib/d3.js"></script>
 	<script type="text/javascript" src="js/lib/angular.js"></script>
+    <script type="text/javascript" src="js/lib/jsonc.js"></script>
     <script type="text/javascript" src="js/lib/lastfm.api.md5.js"></script>
     <script type="text/javascript" src="js/lib/lastfm.api.js"></script>
     <script type="text/javascript" src="js/lib/lastfm.api.cache.js"></script>
@@ -30,7 +31,10 @@
 	<div id="graph" style="align: center"></div>
 	
 	<div>
-		<input type="text" ng-model="newArtist"/><button ng-click="addArtist(newArtist)">add</button>
-	</div>
+		<input type="text" ng-model="newArtist"/><button ng-click="addArtist(newArtist)">Add</button>
+        </br>
+        <span>save string</span><input type="text" ng-model="saveString"/><button ng-click="loadGraph()">Load</button>
+    </div>
+
 </body>
 </html>

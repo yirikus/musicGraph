@@ -13,8 +13,11 @@
     var node;
     var link;
 
-    var WIDTH = 960;
-    var HEIGHT = 500;
+    //var WIDTH = 960;
+    //var HEIGHT = 500;
+
+    var WIDTH = window.outerWidth;
+    var HEIGHT = window.outerHeight;
 
 	// create lastFM cache
 	var cache = new LastFMCache();
@@ -31,8 +34,65 @@
             var addedNode = addNode({name:data.artist.name, similar: data.artist.similar.artist});
             addLinks(addedNode);
             restart();
+            createSaveString();
 		}});
 	};
+
+      /**
+       * http://www.w3schools.com/js/js_cookies.asp
+       * @param cname
+       * @param cvalue
+       * @param exdays
+       */
+      function setCookie(cname, cvalue, exdays) {
+          var d = new Date();
+          d.setTime(d.getTime() + (exdays*24*60*60*1000));
+          var expires = "expires="+d.toUTCString();
+          document.cookie = cname + "=" + cvalue + "; " + expires;
+      }
+
+      /**
+       * http://www.w3schools.com/js/js_cookies.asp
+       * @param cname
+       * @returns {string}
+       */
+      function getCookie(cname) {
+          var name = cname + "=";
+          var ca = document.cookie.split(';');
+          for(var i=0; i<ca.length; i++) {
+              var c = ca[i];
+              while (c.charAt(0)==' ') c = c.substring(1);
+              if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+          }
+          return "";
+      }
+
+      function createSaveString() {
+          var jsonToStore = {nodes:[]};
+          for (var i = 0; i < nodes.length; i++) {
+              jsonToStore.nodes.push({name:nodes[i].name, similar:[]});
+              if (nodes[i].similar && nodes[i].similar.length > 0) {
+                  for (var j = 0; j < nodes[i].similar.length; j++) {
+                      jsonToStore.nodes[i].similar.push({name:nodes[i].similar[j].name});
+                  }
+              }
+          }
+          $scope.saveString = JSONC.pack( jsonToStore, true );
+          if (!$scope.$$phase) {
+            $scope.$apply();
+          }
+      }
+
+      $scope.loadGraph = function() {
+          nodes = [];
+          links = [];
+          var loadedNodes = JSONC.unpack($scope.saveString, true).nodes;
+          for (var i = 0; i < loadedNodes.length; i++) {
+            var addedNode = addNode(loadedNodes[i]);
+            addLinks(addedNode);
+          }
+          initGraph();
+      };
 
       function addNode(artist){
           var index = findByAttr(nodes, {name: artist.name});
@@ -54,7 +114,7 @@
       function addLinks(artistNode) {
           // add links to similar artists
           for (var n = 0; n < nodes.length; n++) {
-              for (var i = 0; i < nodes[n].similar.length; i++) {
+              for (var i = 0; i < artistNode.similar.length; i++) {
                   targetNode = findByAttr(nodes, {name: artistNode.similar[i].name});
                   var linkIndex = findByAttr(links,{source: {name: nodes[n].name}, target: {name: nodes[targetNode].name}});
                   var reverseLinkIndex = findByAttr(links,{target: {name: nodes[n].name}, target: {source: nodes[targetNode].name}});
@@ -102,12 +162,15 @@
       }
 
       function initGraph() {
-        force = d3.layout.force()
-          .size([WIDTH, HEIGHT])
-          .nodes(nodes) // initialize with a single node
-          .linkDistance(60)
-          .charge(-600)
-          .on("tick", tick);
+          d3.select("svg").remove();
+
+          force = d3.layout.force()
+              .size([WIDTH, HEIGHT])
+              .nodes(nodes) // initialize with a single node
+              .links(links)
+              .linkDistance(60)
+              .charge(-600)
+              .on("tick", tick);
 
         svg = d3.select("#graph").append("svg")
           .attr("width", WIDTH)
