@@ -31,9 +31,11 @@
 	<div id="graph" style="align: center"></div>
 	
 	<div>
-		<input type="text" ng-model="newArtist"/><button ng-click="addArtist(newArtist)">Add</button>
-        </br>
-        <span>save string</span><input type="text" ng-model="saveString"/><button ng-click="loadGraph()">Load</button>
+		Artist: <input type="text" ng-model="newArtist"/><button ng-click="addArtist(newArtist)">Add</button>
+        <br/>
+        User:<input type="text" ng-model="userName"/><button ng-click="loadUser(userName)">Load more user artists</button>
+        <br/>
+        <span>Save string</span><input type="text" ng-model="saveString"/><button ng-click="loadGraph()">Load</button>
     </div>
 
 </body>
