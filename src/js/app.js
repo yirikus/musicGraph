@@ -12,12 +12,14 @@
     var links = [];
     var node;
     var link;
+    var userArtistsLoaded = 0;
 
     //var WIDTH = 960;
     //var HEIGHT = 500;
 
     var WIDTH = window.outerWidth;
     var HEIGHT = window.outerHeight;
+    var MAX_USER_ARTISTS = 5;
 
 	// create lastFM cache
 	var cache = new LastFMCache();
@@ -37,6 +39,35 @@
             createSaveString();
 		}});
 	};
+
+      $scope.loadUser = function(userName) {
+          var successHandler = function(data){
+              $scope.userArtists = data.topartists.artist;
+              nodes = [];
+              links = [];
+              initGraph();
+              addUserArtists();
+
+          };
+
+          var addUserArtists = function(){
+              for (var i = userArtistsLoaded; i < $scope.userArtists.length && i < (userArtistsLoaded + MAX_USER_ARTISTS); i++) {
+                  $scope.addArtist($scope.userArtists[i].name);
+              }
+              userArtistsLoaded += MAX_USER_ARTISTS;
+          };
+
+          if (userName != $scope.userArtistsName) {
+              $scope.userArtistsName = userName;
+              lastfm.user.getTopArtists({user:userName}, {success: successHandler, error:function(data, error) {
+                  alert(error);}
+              });
+          } else {
+              addUserArtists();
+          }
+
+
+      };
 
       /**
        * http://www.w3schools.com/js/js_cookies.asp
