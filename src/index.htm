@@ -33,7 +33,7 @@
 	<div>
 		Artist: <input type="text" ng-model="newArtist"/><button ng-click="addArtist(newArtist)">Add</button>
         <br/>
-        User:<input type="text" ng-model="userName"/><button ng-click="loadUser(userName)">Load more user artists</button>
+        User:<input type="text" ng-model="userName"/><button ng-click="loadUser(userName)">Load more user artists</button><span>loaded {{userArtistsLoaded}}/{{userArtists.length}}</span>
         <br/>
         <span>Save string</span><input type="text" ng-model="saveString"/><button ng-click="loadGraph()">Load</button>
     </div>
