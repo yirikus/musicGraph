@@ -12,7 +12,7 @@
     var links = [];
     var node;
     var link;
-    var userArtistsLoaded = 0;
+    $scope.userArtistsLoaded = 0;
 
     //var WIDTH = 960;
     //var HEIGHT = 500;
@@ -51,10 +51,10 @@
           };
 
           var addUserArtists = function(){
-              for (var i = userArtistsLoaded; i < $scope.userArtists.length && i < (userArtistsLoaded + MAX_USER_ARTISTS); i++) {
+              for (var i = $scope.userArtistsLoaded; i < $scope.userArtists.length && i < ($scope.userArtistsLoaded + MAX_USER_ARTISTS); i++) {
                   $scope.addArtist($scope.userArtists[i].name);
               }
-              userArtistsLoaded += MAX_USER_ARTISTS;
+              $scope.userArtistsLoaded += MAX_USER_ARTISTS;
           };
 
           if (userName != $scope.userArtistsName) {
